@@ -157,38 +157,19 @@ export function summarizeRequest(
   status: number,
   headersText: string,
 ): string {
-  // TODO: tu implementación aquí
-  throw new Error("Not implemented");
-}
+  const category = classifyStatus(status);
+  const headers = parseHeaders(headersText);
 
-// ---------------------------------------------------------------------------
-// CLI (opcional, pero recomendado para probar manualmente)
-// ---------------------------------------------------------------------------
+  let summary = `Resumen de la petición
+──────────────────────
+URL: ${url}
+Status: ${status} (${category})
+Headers:
+`;
 
-if (require.main === module) {
-  const [, , cmd, ...args] = process.argv;
-  try {
-    if (cmd === "parse-url" && args[0]) {
-      const parts = parseUrl(args[0]);
-      console.log(JSON.stringify(parts, null, 2));
-    } else if (cmd === "status" && args[0]) {
-      const cat = classifyStatus(Number(args[0]));
-      console.log(cat);
-    } else if (cmd === "headers" && args.length > 0) {
-      const h = parseHeaders(args.join(" "));
-      console.log(JSON.stringify(h, null, 2));
-    } else if (cmd === "summary" && args.length >= 2) {
-      const [url, status, ...rest] = args;
-      console.log(summarizeRequest(url, Number(status), rest.join(" ")));
-    } else {
-      console.log("Uso:");
-      console.log('  npm start parse-url "https://ejemplo.com/path?a=1"');
-      console.log("  npm start status 404");
-      console.log('  npm start headers "Content-Type: application/json"');
-      console.log('  npm start summary "https://x.com" 200 "Content-Type: application/json"');
-    }
-  } catch (e) {
-    console.error("Error:", (e as Error).message);
-    process.exit(1);
+  for (const [key, value] of Object.entries(headers)) {
+    summary += `• ${key}: ${value}\n`;
   }
+
+  return summary;
 }
