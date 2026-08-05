@@ -1,20 +1,110 @@
 /* TODO: Reset y estilos base */
+*{
+    margin: 0; 
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fffefe;
+    color: #0b0b0b;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2{
+    text-align: center;
+    margin-bottom: 20px;
+}
 /* TODO: Galería de productos */
 /* Desktop (>=1024px): 3 columnas usando CSS Grid */
 /* Mobile (<768px): 1 columna con scroll vertical */
-
+.galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
 /* TODO: Estilo de cada tarjeta de producto */
 /* - Imagen ocupa el ancho completo de la tarjeta */
 /* - Nombre del producto en negrita */
 /* - Precio destacado */
-/* - Botón "Comprar" estilizado con hover effect */
+.producto {
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 15px;
+}
 
+.producto img {
+    width: 100%;
+    height: auto;
+}
+
+.producto-info{
+    padding: 10px;
+}
+
+.producto h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.precio{
+    font-size: 18px;
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+/* - Botón "Comprar" estilizado con hover effect */
+/* Botón Comprar */
+.btn-comprar {
+    background-color: #0e8ae2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-comprar:hover {
+    background-color: #0e8ae2;
+}
 /* TODO: To-Do List */
 /* - Lista sin marcadores (list-style: none) */
 /* - Checkbox con label accesible */
 /* - Tareas alternadas con color de fondo (zebra striping) */
+.todo-list {
+    margin-top: 40px;
+}
 
+.tareas {
+    list-style: none;
+    padding: 0;
+}
+
+.tarea{
+    padding: 10px;
+}
+
+.tarea:nth-child(odd){
+    background-color: #f9f9f9;
+}
+
+.tarea:nth-child(even){
+    background-color: #e9e9e9;
+}
 /* TODO: Diseño responsivo */
 /* - Usar @media queries para cambiar entre mobile y desktop */
 /* - La galería debe ser responsiva usando Grid + media queries */
+@media (max-width: 768px) {
+    .galeria {
+        grid-template-columns: 1fr;
+    }
+}
