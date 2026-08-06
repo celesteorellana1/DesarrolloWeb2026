@@ -1,6 +1,7 @@
 /* TODO: Reset y estilos base */
-*{
-    margin: 0; 
+
+* {
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -17,22 +18,28 @@ body {
     margin: 0 auto;
     padding: 20px;
 }
-h1, h2{
+
+h1,
+h2 {
     text-align: center;
     margin-bottom: 20px;
 }
+
 /* TODO: Galería de productos */
 /* Desktop (>=1024px): 3 columnas usando CSS Grid */
 /* Mobile (<768px): 1 columna con scroll vertical */
+
 .galeria {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
+
 /* TODO: Estilo de cada tarjeta de producto */
 /* - Imagen ocupa el ancho completo de la tarjeta */
 /* - Nombre del producto en negrita */
 /* - Precio destacado */
+
 .producto {
     background-color: white;
     border: 1px solid #dddddd;
@@ -40,6 +47,11 @@ h1, h2{
     overflow: hidden;
     text-align: center;
     padding-bottom: 15px;
+    transition: transform 0.3s;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
 }
 
 .producto img {
@@ -47,22 +59,23 @@ h1, h2{
     height: auto;
 }
 
-.producto-info{
+.producto-info {
     padding: 10px;
 }
 
-.producto h3 {
+.producto h2 {
     font-size: 20px;
     margin-bottom: 10px;
 }
 
-.precio{
+.precio {
     font-size: 18px;
     color: #e74c3c;
     margin-bottom: 15px;
 }
+
 /* - Botón "Comprar" estilizado con hover effect */
-/* Botón Comprar */
+
 .btn-comprar {
     background-color: #0e8ae2;
     color: white;
@@ -71,15 +84,18 @@ h1, h2{
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 .btn-comprar:hover {
-    background-color: #0e8ae2;
+    background-color: #0a6fb8;
 }
+
 /* TODO: To-Do List */
 /* - Lista sin marcadores (list-style: none) */
 /* - Checkbox con label accesible */
 /* - Tareas alternadas con color de fondo (zebra striping) */
+
 .todo-list {
     margin-top: 40px;
 }
@@ -89,20 +105,28 @@ h1, h2{
     padding: 0;
 }
 
-.tarea{
-    padding: 10px;
+.tarea {
+    padding: 12px;
+    border-bottom: 1px solid #dddddd;
 }
 
-.tarea:nth-child(odd){
+.tarea:nth-child(odd) {
     background-color: #f9f9f9;
 }
 
-.tarea:nth-child(even){
+.tarea:nth-child(even) {
     background-color: #e9e9e9;
 }
+
+.tarea label {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
 /* TODO: Diseño responsivo */
 /* - Usar @media queries para cambiar entre mobile y desktop */
 /* - La galería debe ser responsiva usando Grid + media queries */
+
 @media (max-width: 768px) {
     .galeria {
         grid-template-columns: 1fr;
