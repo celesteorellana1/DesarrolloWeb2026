@@ -1,0 +1,118 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f2f2f2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.contenedor{
+    width:430px;
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0px 5px 20px rgba(0,0,0,.15);
+}
+
+.encabezado{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:25px;
+}
+
+.fecha{
+    display:flex;
+    gap:12px;
+}
+
+.numero{
+    font-size:70px;
+    font-weight:bold;
+    color:#222;
+}
+
+.mes h2{
+    font-size:25px;
+    color:#222;
+}
+
+.mes p{
+    font-size:26px;
+    color:#666;
+}
+
+.dia{
+    font-size:24px;
+    font-weight:bold;
+    letter-spacing:4px;
+    margin-top:15px;
+}
+
+.acciones{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:px;
+}
+
+.nueva-tarea{
+    background:#f4f0f0;
+    color:#555;
+    padding:18px 60px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:15px 
+}
+
+.circulo{
+    width: 50px;px;
+    height:50px;
+    border:2px solid gray;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.ordenar{
+    background:#b35d5d;
+    color:white;
+    padding:18px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:15px 
+}
+
+.lista{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.tarea{
+    background:#9b9d4b;
+    color:white;
+    padding:18px;
+    border-radius:6px;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.completada{
+    background:#f8f8f8;
+    color:#555;
+    border:2px solid #9b9d4b;
+   text-decoration:line-through;
+}
