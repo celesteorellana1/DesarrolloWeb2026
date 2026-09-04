@@ -119,7 +119,8 @@ export function crearLogger() {
     const eventos = new EventEmitter();
 
     function registrar(mensaje) {
-        eventos.emit('registro', mensaje);
+        const linea = `[${new Date().toISOString()}] ${mensaje}`;
+        eventos.emit('registro', linea);
     }
 
     function onRegistro(callback) {
@@ -195,7 +196,86 @@ export async function agregarMensaje(archivoDatos, texto) {
  * @returns {import('node:http').Server}
  */
 export function crearServidor(config = {}) {
-    throw new Error('Not implemented: crearServidor');
+    const logger = config.logger || crearLogger();
+
+    const servidor = http.createServer(async (req, res) => {
+        logger.registrar(`${req.method} ${req.url}`);
+
+        if (req.method === 'GET' && req.url === '/') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+
+            res.end(JSON.stringify({
+                mensaje: `Bienvenido a ${config.nombreApp || 'mensajes-api'}`,
+                hora: new Date().toISOString(),
+                sistema: infoSistema()
+            }));
+
+            return;
+        }
+
+        if (req.method === 'GET' && req.url === '/mensajes') {
+            const mensajes = await leerMensajes(
+                config.archivoDatos || 'data/mensajes.json'
+            );
+
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify(mensajes));
+
+            return;
+        }
+
+        if (req.method === 'POST' && req.url === '/mensajes') {
+            try {
+                const body = await leerBody(req);
+                const datos = JSON.parse(body);
+
+                const mensaje = await agregarMensaje(
+                    config.archivoDatos || 'data/mensajes.json',
+                    datos.texto
+                );
+
+                if (!mensaje) {
+                    res.writeHead(400, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    });
+
+                    res.end(JSON.stringify({
+                        error: 'El texto es obligatorio'
+                    }));
+
+                    return;
+                }
+
+                res.writeHead(201, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                });
+
+                res.end(JSON.stringify(mensaje));
+            } catch (error) {
+                res.writeHead(400, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                });
+
+                res.end(JSON.stringify({
+                    error: 'JSON inválido'
+                }));
+            }
+
+            return;
+        }
+
+        res.writeHead(404, {
+            'Content-Type': 'application/json; charset=utf-8'
+        });
+
+        res.end(JSON.stringify({
+            error: 'Ruta no encontrada'
+        }));
+    });
+
+    servidor.logger = logger;
+
+    return servidor;
 }
 
 /**
@@ -206,6 +286,14 @@ export function crearServidor(config = {}) {
  * @returns {import('node:http').Server}
  */
 export function iniciarServidor(config = {}) {
-    throw new Error('Not implemented: iniciarServidor');
+    const servidor = crearServidor(config);
+
+    servidor.listen(config.puerto || 3000, () => {
+        console.log(
+            `Servidor escuchando en http://localhost:${config.puerto || 3000}`
+        );
+    });
+
+    return servidor;
 }
 
