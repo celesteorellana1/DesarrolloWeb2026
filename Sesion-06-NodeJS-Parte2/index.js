@@ -17,8 +17,8 @@ async function cargarConfig() {
 }
 
 const config = await cargarConfig();
-const origen = rutaAbsoluta(config.ARCHIVO_ORIGEN || 'data/app.log');
-const destino = rutaAbsoluta(config.ARCHIVO_DESTINO || 'data/filtrado.log');
+const origen = rutaAbsoluta(`../${config.ARCHIVO_ORIGEN || 'data/app.log'}`);
+const destino = rutaAbsoluta(`../${config.ARCHIVO_DESTINO || 'data/filtrado.log'}`);
 
 console.log(registrarProceso(`Ruta del proyecto: ${__dirname}`));
 console.log(registrarProceso(`Filtrando '${config.TEXTO || 'ERROR'}' de ${join(origen)} → ${join(destino)}`));
