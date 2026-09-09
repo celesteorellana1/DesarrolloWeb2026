@@ -15,7 +15,7 @@
 
 import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
-import { Readable } from 'node:stream';
+import { Readable, Transform } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -73,7 +73,31 @@ export function generarId() {
  * @returns {Promise<number>} cantidad de líneas que coincidieron (0 si no hay).
  */
 export async function filtrarLogs(origen, destino, texto) {
-    throw new Error('Not implemented: filtrarLogs');
+    let cantidad = 0;
+
+    const transform = new Transform({
+        transform(chunk, encoding, callback) {
+            const lineas = chunk.toString().split(/\r?\n/);
+
+            const filtradas = lineas.filter(linea => {
+                if (linea.includes(texto)) {
+                    cantidad++;
+                    return true;
+                }
+                return false;
+            });
+
+            callback(null, filtradas.length > 0 ? filtradas.join('\n') + '\n' : '');
+        }
+    });
+
+    await pipeline(
+        createReadStream(origen),
+        transform,
+        createWriteStream(destino)
+    );
+
+    return cantidad;
 }
 
 /**
@@ -85,7 +109,17 @@ export async function filtrarLogs(origen, destino, texto) {
  * @returns {Promise<string[]>}
  */
 export async function leerLineas(ruta) {
-    throw new Error('Not implemented: leerLineas');
+    const stream = createReadStream(ruta, { encoding: 'utf8' });
+    let contenido = '';
+
+    for await (const chunk of stream) {
+        contenido += chunk;
+    }
+
+    return contenido
+        .split(/\r?\n/)
+        .map(linea => linea.trim())
+        .filter(linea => linea.length > 0);
 }
 
 /**
