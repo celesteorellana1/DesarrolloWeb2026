@@ -10,6 +10,7 @@
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { RepositorioAlumnos } from './repositorio.js';
 
 // __dirname en ES Modules
 export const __filename = fileURLToPath(import.meta.url);
@@ -31,7 +32,13 @@ export const __dirname = dirname(__filename);
  * @type {import('express').RequestHandler}
  */
 export function autenticacionFalsa(req, res, next) {
-    next(); // ← TODO: reemplazar por la validación del header
+    const clave = req.get('x-api-key');
+
+    if (clave !== (process.env.API_KEY ?? 'umg-2026')) {
+        return res.status(401).json({ error: 'No autorizado' });
+    }
+
+    next();
 }
 
 /**
@@ -47,7 +54,25 @@ export function autenticacionFalsa(req, res, next) {
  * @type {import('express').RequestHandler}
  */
 export function validarAlumno(req, res, next) {
-    next(); // ← TODO: reemplazar por las validaciones
+    const { nombre, apellido, email, edad } = req.body;
+
+    if (
+        typeof nombre !== 'string' ||
+        !nombre.trim() ||
+        typeof apellido !== 'string' ||
+        !apellido.trim() ||
+        typeof email !== 'string' ||
+        !email.trim() ||
+        !email.includes('@')
+    ) {
+        return res.status(400).json({ error: 'Datos de alumno inválidos' });
+    }
+
+    if (edad !== undefined && (typeof edad !== 'number' || edad < 0)) {
+        return res.status(400).json({ error: 'Datos de alumno inválidos' });
+    }
+
+    next();
 }
 
 // ============================================================
@@ -67,33 +92,56 @@ export function crearApp(repositorio) {
     // Middlewares base
     app.use(express.json());
 
-    // Sitio web estático (public/index.html, styles.css, app.js)
+    // Sitio web estatico
     app.use(express.static(join(__dirname, '..', 'public')));
 
-    // TODO: GET /alumnos → lista todos                    → 200 [ ...alumnos ]
+    // GET /alumnos lista todos
     app.get('/alumnos', (req, res) => {
-        res.status(501).json({ error: 'TODO: GET /alumnos' });
+        res.status(200).json(repositorio.listar());
     });
 
-    // TODO: GET /alumnos/:id → uno o 404
+    // GET /alumnos/:id uno o 404
     app.get('/alumnos/:id', (req, res) => {
-        res.status(501).json({ error: 'TODO: GET /alumnos/:id' });
+        const alumno = repositorio.obtener(req.params.id);
+
+        if (!alumno) {
+            return res.status(404).json({ error: 'Alumno no encontrado' });
+        }
+
+        res.status(200).json(alumno);
     });
 
-    // TODO: POST /alumnos → crear (requiere autenticacionFalsa + validarAlumno) → 201
-    app.post('/alumnos', (req, res) => {
-        res.status(501).json({ error: 'TODO: POST /alumnos' });
+    // POST /alumnos crear
+    app.post('/alumnos', autenticacionFalsa, validarAlumno, (req, res) => {
+        const alumno = repositorio.crear(req.body);
+
+        res.status(201).json(alumno);
     });
 
-    // TODO: PUT /alumnos/:id → actualizar (auth + validarAlumno) → 200 o 404
-    app.put('/alumnos/:id', (req, res) => {
-        res.status(501).json({ error: 'TODO: PUT /alumnos/:id' });
+    // PUT /alumnos/:id actualizar
+    app.put('/alumnos/:id', autenticacionFalsa, validarAlumno, (req, res) => {
+        const alumno = repositorio.actualizar(req.params.id, req.body);
+
+        if (!alumno) {
+            return res.status(404).json({ error: 'Alumno no encontrado' });
+        }
+
+        res.status(200).json(alumno);
     });
 
-    // TODO: DELETE /alumnos/:id → eliminar (auth) → 204 o 404
-    app.delete('/alumnos/:id', (req, res) => {
-        res.status(501).json({ error: 'TODO: DELETE /alumnos/:id' });
+    // DELETE /alumnos/:id eliminar
+    app.delete('/alumnos/:id', autenticacionFalsa, (req, res) => {
+        const eliminado = repositorio.eliminar(req.params.id);
+
+        if (!eliminado) {
+            return res.status(404).json({ error: 'Alumno no encontrado' });
+        }
+
+        res.status(204).send();
     });
 
     return app;
 }
+
+const repositorio = new RepositorioAlumnos();
+export const app = crearApp(repositorio);
