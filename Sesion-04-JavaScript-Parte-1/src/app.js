@@ -1,0 +1,209 @@
+/**
+ * Lista de Tareas — JS Parte 1
+ * Universidad Mariano Gálvez de Guatemala · Desarrollo Web
+ *
+ * Implementa las funciones marcadas con TODO para que los tests pasen.
+ * No cambies los nombres exportados ni su firma.
+ */
+
+const STORAGE_KEY = "tareas-dw-s4";
+
+// Estado en memoria (lo que se persiste y se renderiza)
+let tareas = [];
+
+/**
+ * Devuelve todas las tareas. Útil para los tests.
+ * @returns {Array<{id: string, texto: string, completada: boolean}>}
+ */
+export function obtenerTareas() {
+    return tareas;
+}
+
+/**
+ * Crea un id único para cada tarea.
+ * @returns {string}
+ */
+export function generarId() {
+    return `t-${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+}
+
+/**
+ * Agrega una tarea al modelo.
+ * @param {string} texto
+ * @returns {{id: string, texto: string, completada: boolean} | null}
+ *   La tarea creada, o null si el texto es vacío.
+ */
+
+
+export function agregarTarea(texto) {
+    if (!texto || texto.trim() === "") {
+        return null;
+    }
+    const tarea = {
+        id: generarId(),
+        texto: texto.trim(),
+        completada: false
+    };
+    tareas.push(tarea);
+    return tarea;
+}
+
+/**
+ * Elimina una tarea por id. Devuelve true si la encontró y eliminó.
+ * @param {string} id
+ * @returns {boolean}
+ */
+export function eliminarTarea(id) {
+    const cantidadAntes = tareas.length;
+    tareas = tareas.filter((tarea) => tarea.id !== id);
+    return tareas.length < cantidadAntes;
+}
+
+/**
+ * Marca/desmarca una tarea como completada. Devuelve true si la encontró.
+ * @param {string} id
+ * @returns {boolean}
+ */
+export function toggleTarea(id) {
+    const tarea = tareas.find((tarea) => tarea.id === id);
+    if (!tarea) {
+        return false;
+    }
+    tarea.completada = !tarea.completada;
+    return true;
+}
+
+/**
+ * Devuelve un subconjunto de tareas según el filtro.
+ * @param {"todas"|"pendientes"|"completadas"} filtro
+ * @returns {Array}
+ */
+export function filtrarTareas(filtro) {
+    if (filtro === "pendientes") {
+        return tareas.filter((tarea) => !tarea.completada);
+    }
+
+    if (filtro === "completadas") {
+        return tareas.filter((tarea) => tarea.completada);
+    }
+    return tareas;
+}
+
+/**
+ * Persiste el array `tareas` en localStorage como JSON.
+ */
+export function guardar() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tareas));
+}
+
+/**
+ * Carga las tareas desde localStorage. Si no hay nada, deja el array vacío.
+ */
+export function cargar() {
+    try {
+        const datos = localStorage.getItem(STORAGE_KEY);
+
+        if (datos) {
+            tareas = JSON.parse(datos);
+        } else {
+            tareas = [];
+        }
+    } catch (error) {
+        tareas = [];
+    }
+}
+
+// =====================================================
+// Renderizado y eventos (no se exportan, pero se prueban
+// indirectamente con los tests que inspeccionan el DOM).
+// =====================================================
+
+/**
+ * Pinta la lista de tareas en el DOM, aplicando el filtro activo.
+ * @param {string} filtro - "todas" | "pendientes" | "completadas"
+ */
+export function render(filtro = "todas") {
+    const lista = document.getElementById("lista-tareas");
+    const contador = document.getElementById("contador");
+    if (!lista) return;
+
+    lista.innerHTML = "";
+    const visibles = filtrarTareas(filtro);
+
+    for (const tarea of visibles) {
+        const li = document.createElement("li");
+        if (tarea.completada) li.classList.add("completada");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = tarea.completada;
+        checkbox.dataset.id = tarea.id;
+        checkbox.setAttribute("aria-label", `Marcar "${tarea.texto}" como hecha`);
+        checkbox.addEventListener("change", () => {
+            toggleTarea(tarea.id);
+            guardar();
+            render(filtroActual);
+        });
+
+        const span = document.createElement("span");
+        span.className = "texto";
+        span.textContent = tarea.texto;
+
+        const btnEliminar = document.createElement("button");
+        btnEliminar.type = "button";
+        btnEliminar.className = "eliminar";
+        btnEliminar.textContent = "✕";
+        btnEliminar.setAttribute("aria-label", `Eliminar "${tarea.texto}"`);
+        btnEliminar.addEventListener("click", () => {
+            eliminarTarea(tarea.id);
+            guardar();
+            render(filtroActual);
+        });
+
+        li.append(checkbox, span, btnEliminar);
+        lista.appendChild(li);
+    }
+
+    if (contador) {
+        const total = tareas.length;
+        const hechas = tareas.filter((t) => t.completada).length;
+        contador.textContent = `${total} tarea${total === 1 ? "" : "s"} (${hechas} hechas)`;
+    }
+}
+
+let filtroActual = "todas";
+
+function init() {
+    cargar();
+    render(filtroActual);
+
+    const form = document.getElementById("form-tarea");
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const input = document.getElementById("input-tarea");
+            const creada = agregarTarea(input.value);
+            if (creada) {
+                guardar();
+                render(filtroActual);
+                input.value = "";
+                input.focus();
+            }
+        });
+    }
+
+    const botonesFiltro = document.querySelectorAll(".filtro");
+    botonesFiltro.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            filtroActual = btn.dataset.filtro;
+            botonesFiltro.forEach((b) => b.classList.remove("activo"));
+            btn.classList.add("activo");
+            render(filtroActual);
+        });
+    });
+}
+
+// Solo inicializar cuando hay un DOM (no en tests con jsdom)
+if (typeof document !== "undefined" && document.getElementById("lista-tareas")) {
+    document.addEventListener("DOMContentLoaded", init);
+}

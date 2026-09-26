@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viajes por el mundo — Inicio</title>
+  <meta name="description" content="Sitio web sobre destinos turísticos y viajes por el mundo.">
+  <meta name="author" content="Celeste Orellana">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/854/854878.png">
+</head>
+<body>
+
+  <header>
+    <h1>Viajes por el mundo</h1>
+    <nav>
+      <a href="index.html">Inicio</a> |
+      <a href="pagina1.html">Destinos</a> |
+      <a href="pagina2.html">Consejos</a> |
+      <a href="pagina3.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Descubre nuevos destinos</h2>
+
+      <!-- TODO: usa <figure> + <figcaption> para una imagen con alt y loading="lazy" -->
+    <figure>
+      <img
+        src="Imagenes/AntiguaGuatemala.avif"
+        alt="Paisaje de un destino turistico"
+        width="800"
+        height="400"
+        loading="lazy">
+      <figcaption>
+        Descubre lugares increibles alrededor del mundo.
+      </figcaption>
+    </figure>
+
+      <p>
+        Explora diferentes lugares del mundo, conoce destinos increibles y descubre consejos para planificar tus proximas vacaciones. 
+      </p>
+
+      <!-- TODO: usa <dialog> + un boton con command/commandfor (Invoker Commands API) -->
+      <dialog id="bienvenida">
+        <h3>Hola!</h3>
+        <p>Esto es un dialog modal nativo.</p>
+        <form method="dialog">
+          <button>Cerrar</button>
+        </form>
+      </dialog>
+      <button command="show-modal" commandfor="bienvenida">
+        Abrir dialog
+      </button>
+
+      <!-- TODO: usa popover para un menu o tooltip -->
+      <button popovertarget="menu-ayuda">?</button>
+      <div id="menu-ayuda" popover>
+        <h4>Ayuda</h4>
+        <p>Contenido del popover...</p>
+      </div>
+
+      <!-- TODO: formulario con al menos 3 inputs (text, email, etc.) -->
+      <form action="#" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" type="text" name="nombre" required minlength="3">
+
+        <label for="email">Email:</label>
+        <input id="email" type="email" name="email" required>
+
+        <label for="telefono">Teléfono:</label>
+        <input id="telefono" type="tel" name="telefono" required>
+        
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+
+        <button type="submit">Enviar</button>
+      </form>
+    </article>
+    </article>
+    <aside>
+      <h3>Consejo para viajeros</h3>
+      <p>
+        Planifica tus viajes con anticipacion, lleva siempre tus documentos y disfruta de cada experiencia de forma segura.
+      </p>
+    </aside>
+
+</main>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Viajes por el Mundo — Universidad Mariano Galvez</p>
+  </footer>
+
+</body>
+</html>

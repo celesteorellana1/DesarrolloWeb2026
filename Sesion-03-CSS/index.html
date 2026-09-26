@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinos Turísticos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <main class="container">
+        <h1>Destinos Turísticos</h1>
+
+        <!-- TODO: Galería de productos
+             Cada tarjeta debe contener:
+             - Imagen del producto (usa placeholder o imágenes de ejemplo)
+             - Nombre del producto
+             - Precio
+             - Botón con texto "Comprar"
+             
+             Desktop (>=1024px): 3 columnas
+             Mobile (<768px): 1 columna con scroll vertical
+        -->
+        <section class="galeria">
+
+            <article class="producto">
+                <img src="imagenes/paris.avif" alt="Paris, Francia">
+                <div class="producto-info">
+                    <h2>Paris, Francia</h2>
+                    <p class="precio">Q8,500.00</p>
+                    <button class="btn-comprar">Comprar</button>
+                </div>
+            </article>
+
+            <article class="producto">
+                <img src="imagenes/roma.jpg" alt="Roma, Italia">
+                <div class="producto-info">
+                    <h2>Roma, Italia</h2>
+                    <p class="precio">Q7,900.00</p>
+                    <button class="btn-comprar">Comprar</button>
+                </div>
+            </article>
+
+            <article class="producto">
+                <img src="imagenes/tokio.jpg" alt="Tokio, Japón">
+                <div class="producto-info">
+                    <h2>Tokio, Japón</h2>
+                    <p class="precio">Q12,500.00</p>
+                    <button class="btn-comprar">Comprar</button>
+                </div>
+            </article>
+
+            <article class="producto">
+                <img src="imagenes/NuevaYork.jpg" alt="Nueva York, Estados Unidos">
+                <div class="producto-info">
+                    <h2>Nueva York, Estados Unidos</h2>
+                    <p class="precio">Q10,000.00</p>
+                    <button class="btn-comprar">Comprar</button>
+                </div>
+            </article>
+
+            <article class="producto">
+                <img src="imagenes/antigiaGuatemala.webp" alt="Antigua Guatemala">
+                <div class="producto-info">
+                    <h2>Antigua Guatemala</h2>
+                    <p class="precio">Q2,500.00</p>
+                    <button class="btn-comprar">Comprar</button>
+                </div>
+            </article>
+
+            <article class="producto">
+                <img src="imagenes/cancun.webp" alt="Cancun, Mexico">
+                <div class="producto-info">
+                    <h2>Cancun, Mexico</h2>
+                    <p class="precio">Q5,200.00</p>
+                    <button class="btn-comprar">Comprar</button>
+                </div>
+            </article>
+
+        </section>
+
+        <h2>Lista de preparacion para viajar</h2>
+
+        <!-- TODO: Layout de Todo List
+             Lista de tareas estilizada con:
+             - Checkbox para marcar completado
+             - Texto de la tarea
+             - Diseño limpio y accesible
+        -->
+        <section class="todo-list">
+            <ul class="tareas" role="list">
+                <li class="tarea">
+                    <input type="checkbox" id="t1">
+                    <label for="t1">Elegir el destino</label>
+                </li>
+                <li class="tarea">
+                    <input type="checkbox" id="t2">
+                    <label for="t2">Reservar el hotel</label>
+                </li>
+                <li class="tarea">
+                    <input type="checkbox" id="t3">
+                    <label for="t3">Comprar los boletos</label>
+                </li>
+                <li class="tarea">
+                    <input type="checkbox" id="t4">
+                    <label for="t4">Hacer la maleta</label>
+                </li>
+                <li class="tarea">
+                    <input type="checkbox" id="t5">
+                    <label for="t5">Llevar documentos personales</label>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+</body>
+</html>
